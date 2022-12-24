@@ -52,3 +52,6 @@ def read_mailbox():
 
     except Exception as e:
         print(e)
+
+
+read_mailbox()
