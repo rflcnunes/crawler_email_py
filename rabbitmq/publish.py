@@ -1,24 +1,14 @@
 import pika
 
-try:
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(
-            host='localhost'
-        ))
-    channel = connection.channel()
-except Exception as e:
-    print(e)
 
-
-def publish(queue, exchange, routing_key, body):
+def publish(queue, message, exchange=''):
     try:
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        channel = connection.channel()
         channel.queue_declare(queue=queue)
-
-        channel.basic_publish(exchange=exchange,
-                              routing_key=routing_key,
-                              body=body)
-
-        print(f" [x] Sent {body}")
+        channel.basic_publish(exchange=exchange, routing_key=queue, body=message)
         connection.close()
+
+        print(f" [x] Sent {message}")
     except Exception as exception:
         print('Exception: ', exception)
