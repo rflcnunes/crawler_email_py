@@ -11,6 +11,7 @@ HOST = os.environ.get('IMAP_GMAIL_HOST')
 USERNAME = os.environ.get('IMAP_GMAIL_EMAIL')
 PASSWORD = os.environ.get('IMAP_GMAIL_PASSWORD')
 QUEUE = os.environ.get('RABBITMQ_DEFAULT_QUEUE')
+RABBIT_STATUS = os.environ.get('CRAWLER_RABBIT_ACTIVE')
 
 
 def read_mailbox():
@@ -43,6 +44,9 @@ def read_mailbox():
                         }
 
                     data = json.dumps(data)
+
+                    if RABBIT_STATUS != 'True':
+                        return False
 
                     rabbitmq.publish.publish(QUEUE, data)
 
