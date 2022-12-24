@@ -1,18 +1,22 @@
+import json
 import os
 
 import dotenv
 from imap_tools import MailBox
 
+import rabbitmq.publish
+
 dotenv.load_dotenv()
 HOST = os.environ.get('IMAP_GMAIL_HOST')
 USERNAME = os.environ.get('IMAP_GMAIL_EMAIL')
 PASSWORD = os.environ.get('IMAP_GMAIL_PASSWORD')
+QUEUE = os.environ.get('RABBITMQ_DEFAULT_QUEUE')
 
 
 def read_mailbox():
     try:
         with MailBox(HOST).login(USERNAME, PASSWORD) as mailbox:
-            mailbox.folder.set('INBOX')
+            mailbox.folder.set('crawler_test')
             status = mailbox.folder.status()
             print(f'Total messages: {status["MESSAGES"]}')
             for msg in mailbox.fetch(reverse=True, mark_seen=False):
@@ -37,6 +41,10 @@ def read_mailbox():
                             'is_attachment': True,
                             'filename': attachment.filename,
                         }
+
+                    data = json.dumps(data)
+
+                    rabbitmq.publish.publish(QUEUE, data)
 
     except Exception as e:
         print(e)
