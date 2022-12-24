@@ -12,14 +12,20 @@ USERNAME = os.environ.get('IMAP_GMAIL_EMAIL')
 PASSWORD = os.environ.get('IMAP_GMAIL_PASSWORD')
 QUEUE = os.environ.get('RABBITMQ_DEFAULT_QUEUE')
 RABBIT_STATUS = os.environ.get('CRAWLER_RABBIT_ACTIVE')
+MAILBOX_READ = input('Enter the mailbox name: ')
 
 
 def read_mailbox():
     try:
         with MailBox(HOST).login(USERNAME, PASSWORD) as mailbox:
-            mailbox.folder.set('crawler_test')
+            try:
+                mailbox.folder.set(MAILBOX_READ)
+            except Exception as exception:
+                print("Not found mailbox: ", exception)
+
             status = mailbox.folder.status()
             print(f'Total messages: {status["MESSAGES"]}')
+
             for msg in mailbox.fetch(reverse=True, mark_seen=False):
                 if not msg.headers:
                     raise Exception("Header is empty")
