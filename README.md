@@ -22,6 +22,7 @@ docker-compose up -d
 ```
 
 Access RabbitMQ at http://localhost:15672/ with username and password `guest`.
+
 Access Minio at http://localhost:9002/ with username and password `minioadmin`.
 
 Install dependencies
