@@ -63,16 +63,18 @@ def read_mailbox():
                         for attachment in msg.attachments:
                             file_name = attachment.filename
                             file_path = PATH_TEMP_ATTACHMENTS + file_name
+
+                            if os.path.isdir(file_path):
+                                continue
+
                             with open(file_path, 'wb') as f:
                                 f.write(attachment.payload)
 
                             bucket.send_to_minio_bucket.upload_file(CRAWLER_BUCKET, file_name, file_path)
-
-                    for file in os.listdir(PATH_TEMP_ATTACHMENTS):
-                        os.remove(PATH_TEMP_ATTACHMENTS + file)
+                            os.remove(file_path)
 
     except Exception as e:
-        print(e)
+        print(f" [ ] Error: {e} - {type(e)} - {e.args} - {e.__traceback__}")
 
 
 read_mailbox()
