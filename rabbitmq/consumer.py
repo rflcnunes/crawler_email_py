@@ -8,7 +8,7 @@ except Exception as e:
 
 
 def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
+    print(f" [x] Received: {body}")
 
 
 def consume(queue):
