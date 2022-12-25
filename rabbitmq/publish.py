@@ -11,4 +11,4 @@ def publish(queue, message, exchange=''):
 
         print(f" [x] Sent {message}")
     except Exception as exception:
-        print('Exception: ', exception)
+        print(f' [ ] Exception: {exception}')
