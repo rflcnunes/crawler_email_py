@@ -20,7 +20,7 @@ def list_buckets():
 
 def upload_file(bucket_name, file_name, file_path):
     try:
-        print(f"Bucket: {bucket_name}, File: {file_name}, Path: {file_path}")
+        print(f" [x] Bucket: {bucket_name}, File: {file_name}, Path: {file_path}")
         return MINIO_CLIENT.fput_object(bucket_name, file_name, file_path)
     except Exception as e:
-        print(e)
+        print(f" [ ] Error: {e}")
