@@ -19,6 +19,7 @@ Create data and logs folder in the root directory.
 ```bash 
 mkdir data
 mkdir logs
+mkdir attachments
 ```
 
 Added your variables in the .env file.
