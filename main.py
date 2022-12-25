@@ -69,7 +69,6 @@ def read_mailbox():
                             bucket.send_to_minio_bucket.upload_file(CRAWLER_BUCKET, file_name, file_path)
 
                     for file in os.listdir(PATH_TEMP_ATTACHMENTS):
-                        print(file)
                         os.remove(PATH_TEMP_ATTACHMENTS + file)
 
     except Exception as e:
