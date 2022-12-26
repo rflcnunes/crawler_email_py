@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import dotenv
 from imap_tools import MailBox
@@ -16,6 +17,14 @@ RABBIT_STATUS = os.environ.get('CRAWLER_RABBIT_ACTIVE')
 MAILBOX_READ = input('Enter the mailbox name: ')
 PATH_TEMP_ATTACHMENTS = 'attachments/'
 CRAWLER_BUCKET = os.environ.get('CRAWLER_BUCKET')
+
+
+def format_data(message):
+    cleaner = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+    message = re.sub(cleaner, '', message)
+    message = re.sub(r'http\S+', '', message)
+
+    return message
 
 
 def read_mailbox():
@@ -38,10 +47,13 @@ def read_mailbox():
                         'to': msg.to,
                         'headers': msg.headers,
                         'subject': msg.subject,
-                        'body': msg.text,
+                        'body': format_data(msg.text),
                         'html': msg.html,
                         'messageId': msg.uid,
                     }
+
+                    if not msg.to:
+                        data['to'] = msg.headers['bcc']
 
                     if not data['body'] and data['subject']:
                         data['body'] = data['subject']
