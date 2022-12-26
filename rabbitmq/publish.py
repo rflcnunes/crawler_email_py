@@ -1,3 +1,5 @@
+import time
+
 import pika
 
 
@@ -12,3 +14,14 @@ def publish(queue, message, exchange=''):
         print(f" [x] Sent {message}")
     except Exception as exception:
         print(f' [ ] Exception: {exception}')
+
+
+def test_publish(queue, message):
+    question = input(f" [x] Send {message} to {queue}? (y/n): ")
+    if question == 'y':
+        repeat = 50
+        seconds = 1000
+
+        for i in range(repeat):
+            publish(queue=queue, message=message)
+            time.sleep(seconds / 1000)
