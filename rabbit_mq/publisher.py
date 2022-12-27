@@ -23,11 +23,14 @@ class Publisher:
             print(f' [ ] Exception: {exception}')
 
     def test_publish(self):
-        question = input(f" [x] Send {self.message} to {self.queue}? (y/n): ")
-        if question == 'y':
-            repeat = 50
-            seconds = 1000
+        try:
+            question = input(f" [x] Send {self.message} to {self.queue}? (y/n): ")
+            if question == 'y':
+                repeat = 50
+                seconds = 1000
 
-            for i in range(repeat):
-                self.publish()
-                time.sleep(seconds / 1000)
+                for i in range(repeat):
+                    self.publish()
+                    time.sleep(seconds / 1000)
+        except Exception as exception:
+            print(f' [ ] Exception: {exception}')
